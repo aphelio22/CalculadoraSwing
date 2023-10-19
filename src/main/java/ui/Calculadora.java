@@ -251,7 +251,7 @@ public class Calculadora extends JFrame {
         equalsButton.addActionListener(e -> {
             try {
                 /* Verifica si 'showTextField' está vacío a la hora de pulsar 'equalsButton'
-                 * Si está vacío y es 0, y se ha pulsado el botón, devolverá 'Faltan operadores.' en color rojo en 'lastResultLabel'. */
+                 * Si está vacío, y se ha pulsado el botón, devolverá 'Faltan operadores.' en color rojo en 'lastResultLabel'. */
                 if (!showTextField.getText().equals("")) {
                     /* Verifica si el contenido de 'showTextField' es un carácter válido, un número.
                      *  En este caso solo se verifica el punto porque no hay más caracteres que no sean
