@@ -111,10 +111,6 @@ public class Calculadora extends JFrame {
      */
     private double number2 = 0;
     /**
-     * Número de la potencia.
-     */
-    private Integer pow = 0;
-    /**
      * Resultado de la operación.
      */
     private double result;
