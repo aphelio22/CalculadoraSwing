@@ -94,7 +94,7 @@ public class Calculadora extends JFrame {
      */
     private JLabel lastResultLabel;
     /**
-     * Botón para las raíces cuadradas;
+     * Botón para las raíces cuadradas.
      */
     private JButton rcButton;
     /**
