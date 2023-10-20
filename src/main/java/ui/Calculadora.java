@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.spi.NumberFormatProvider;
 
 /**
  * Clase que representa una calculadora con una interfaz gráfica en JAVA.
@@ -13,9 +14,9 @@ public class Calculadora extends JFrame {
      */
     private JPanel panelPrincipal;
     /**
-     * Atributo del Border Layout que engloba al resto de elementos gráficos.
+     * Atributo del panel que contiene los botones, label y textField y que se encuentra dentro de 'panelPrincipal'.
      */
-    private JPanel bLayoutKeys;
+    private JPanel panelBotones;
     /**
      * Botón para borrar.
      */
@@ -92,15 +93,27 @@ public class Calculadora extends JFrame {
      * Campo donde se imprimen los resultados y distintos mensajes de error.
      */
     private JLabel lastResultLabel;
-    private JLabel lastResultZeroLabel;
     /**
-     * Variable 1 para operar.
+     * Botón para las raíces cuadradas;
+     */
+    private JButton rcButton;
+    /**
+     * Botón para las potencias.
+     */
+    private JButton pButton;
+
+    /**
+     * Número 1 para operar.
      */
     private double number1 = 0;
     /**
-     * Variable 2 para operar.
+     * Número 2 para operar.
      */
     private double number2 = 0;
+    /**
+     * Número de la potencia.
+     */
+    private Integer pow = 0;
     /**
      * Resultado de la operación.
      */
@@ -116,7 +129,7 @@ public class Calculadora extends JFrame {
     public Calculadora() {
         this.setContentPane(panelPrincipal);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(300, 300);
+        this.setSize(350, 400);
         this.setTitle("Calculadora");
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -124,9 +137,9 @@ public class Calculadora extends JFrame {
         showTextField.setText("");
         lastResultLabel.setText("¡Bienvenido!");
         lastResultLabel.setForeground(Color.black);
+        panelBotones.setBackground(Color.decode("#D9E4E8"));
 
         buttonLabelDimension();
-
         numberSignButtonListener();
         operationButtonListener();
 
@@ -139,23 +152,25 @@ public class Calculadora extends JFrame {
     private void buttonLabelDimension() {
 
         //Se establecen las dimensiones de cada botón.
-        cButton.setPreferredSize(new Dimension(30, 30));
-        plusButton.setPreferredSize(new Dimension(30, 30));
-        minusButton.setPreferredSize(new Dimension(30, 30));
-        crossButton.setPreferredSize(new Dimension(30, 30));
-        divButton.setPreferredSize(new Dimension(30, 30));
-        equalsButton.setPreferredSize(new Dimension(30, 30));
-        pointButton.setPreferredSize(new Dimension(30, 30));
-        a1Button.setPreferredSize(new Dimension(30, 30));
-        a2Button.setPreferredSize(new Dimension(30, 30));
-        a3Button.setPreferredSize(new Dimension(30, 30));
-        a4Button.setPreferredSize(new Dimension(30, 30));
-        a5Button.setPreferredSize(new Dimension(30, 30));
-        a6Button.setPreferredSize(new Dimension(30, 30));
-        a7Button.setPreferredSize(new Dimension(30, 30));
-        a8Button.setPreferredSize(new Dimension(30, 30));
-        a9Button.setPreferredSize(new Dimension(30, 30));
-        a0Button.setPreferredSize(new Dimension(30, 30));
+        cButton.setPreferredSize(new Dimension(70, 40));
+        plusButton.setPreferredSize(new Dimension(70, 40));
+        minusButton.setPreferredSize(new Dimension(70, 40));
+        crossButton.setPreferredSize(new Dimension(70, 40));
+        divButton.setPreferredSize(new Dimension(70, 40));
+        equalsButton.setPreferredSize(new Dimension(70, 40));
+        rcButton.setPreferredSize(new Dimension(70, 40));
+        pButton.setPreferredSize(new Dimension(70, 40));
+        pointButton.setPreferredSize(new Dimension(70, 40));
+        a1Button.setPreferredSize(new Dimension(70, 40));
+        a2Button.setPreferredSize(new Dimension(70, 40));
+        a3Button.setPreferredSize(new Dimension(70, 40));
+        a4Button.setPreferredSize(new Dimension(70, 40));
+        a5Button.setPreferredSize(new Dimension(70, 40));
+        a6Button.setPreferredSize(new Dimension(70, 40));
+        a7Button.setPreferredSize(new Dimension(70, 40));
+        a8Button.setPreferredSize(new Dimension(70, 40));
+        a9Button.setPreferredSize(new Dimension(70, 40));
+        a0Button.setPreferredSize(new Dimension(70, 40));
 
     }
 
@@ -194,10 +209,9 @@ public class Calculadora extends JFrame {
      * cuando se pulsan.
      */
     private void operationButtonListener() {
-
         //BotónSuma
         plusButton.addActionListener(e -> {
-            //Trata 'NumberFormatException' si se pulsa el botón y no hay operadores
+            //Trata 'NumberFormatException' si se pulsa el botón y no hay operadores.
             try {
                 number1 = Double.parseDouble(showTextField.getText());
                 showTextField.setText("");
@@ -210,11 +224,16 @@ public class Calculadora extends JFrame {
 
         //BotónResta
         minusButton.addActionListener(e -> {
-            //Trata 'NumberFormatException' si se pulsa el botón y no hay operadores
+            //Trata 'NumberFormatException' si se pulsa el botón y no hay operadores.
             try {
-                number1 = Double.parseDouble(showTextField.getText());
-                showTextField.setText("");
-                operation = "-";
+                if (!showTextField.getText().isEmpty()) {
+                    number1 = Double.parseDouble(showTextField.getText());
+                    showTextField.setText("");
+                    operation = "-";
+                } else {
+                    showTextField.setText("-");
+                }
+
             } catch (NumberFormatException n) {
                 lastResultLabel.setText("Faltan operadores.");
                 lastResultLabel.setForeground(Color.red);
@@ -223,7 +242,7 @@ public class Calculadora extends JFrame {
 
         //BotónMultiplicar
         crossButton.addActionListener(e -> {
-            //Trata 'NumberFormatException' si se pulsa el botón y no hay operadores
+            //Trata 'NumberFormatException' si se pulsa el botón y no hay operadores.
             try {
                 number1 = Double.parseDouble(showTextField.getText());
                 showTextField.setText("");
@@ -236,7 +255,7 @@ public class Calculadora extends JFrame {
 
         //BotónDividir
         divButton.addActionListener(e -> {
-            //Trata 'NumberFormatException' si se pulsa el botón y no hay operadores
+            //Trata 'NumberFormatException' si se pulsa el botón y no hay operadores.
             try {
                 number1 = Double.parseDouble(showTextField.getText());
                 showTextField.setText("");
@@ -247,46 +266,83 @@ public class Calculadora extends JFrame {
             }
         });
 
-        //BotónIgual
-        equalsButton.addActionListener(e -> {
+        //BotónRaízCuadrada
+        //Trata 'NumberFormatException' si se pulsa el botón y no hay operadores.
+        rcButton.addActionListener(e -> {
             try {
-                /* Verifica si 'showTextField' está vacío a la hora de pulsar 'equalsButton'
-                 * Si está vacío, y se ha pulsado el botón, devolverá 'Faltan operadores.' en color rojo en 'lastResultLabel'. */
-                if (!showTextField.getText().equals("")) {
-                    /* Verifica si el contenido de 'showTextField' es un carácter válido, un número.
-                     *  En este caso solo se verifica el punto porque no hay más caracteres que no sean
-                     *  números en el teclado de la calculadora.
-                     *
-                     *  Si se introduce un carácter no permitido devolverá 'Introduce un número.' en color rojo
-                     *  en 'lastResultLabel', además pondrá 'showTextField' en blanco. */
-                    if (!showTextField.getText().equals(".")) {
-                        number2 = Double.parseDouble(showTextField.getText());
-                        //Si se divide cualquier número entre 0 se devolverá 'Indivisible entre 0 en rojo.
-                        if (number2 != 0) {
-                            operation();
-                        } else {
-                            lastResultLabel.setText("Indivisible entre 0");
-                            lastResultLabel.setForeground(Color.red);
-                            showTextField.setText(String.valueOf(result));
-                        }
-                        /* Restablece la variable operación para que al pulsar
-                         * sobre el botón igual inmediatamente después de obtener el resultado
-                         * este no vuelva a sumarse, restarse, multiplicarse o dividirse sobre sí
-                         * mismo.*/
-                        operation = null;
-                    } else {
-                        lastResultLabel.setText("Introduce un número.");
-                        lastResultLabel.setForeground(Color.red);
-                        showTextField.setText("");
-                    }
-                } else {
-                    lastResultLabel.setText("Faltan operadores.");
-                    lastResultLabel.setForeground(Color.red);
-                }
-                /* Trata 'NumberFormatException' o 'NullPointerException' si se pulsa el botón y no hay operadores */
-            } catch (NumberFormatException | NullPointerException n) {
+                number1 = Double.parseDouble(showTextField.getText());
+                operation = "√";
+            } catch (NumberFormatException n) {
                 lastResultLabel.setText("Faltan operadores.");
                 lastResultLabel.setForeground(Color.red);
+            }
+        });
+
+        //BotónPotencia
+        //Trata 'NumberFormatException' si se pulsa el botón y no hay operadores.
+        pButton.addActionListener(e -> {
+            try {
+                number1 = Double.parseDouble(showTextField.getText());
+                operation = "X^2";
+
+            } catch (NumberFormatException n) {
+                lastResultLabel.setText("Faltan operadores.");
+                lastResultLabel.setForeground(Color.red);
+            }
+        });
+
+        //BotónIgual
+        equalsButton.addActionListener(e -> {
+            /* Trata 'NumberFormatException' si se pulsa el botón y solo hay un operador pero se ha seleccionado una operación.
+             *  En la calculadora de Windows, al darle a al botón '"' después de este caso, el programa interpreta que se ha querido realizar la
+             *  operación sobre sí mismo. Esta excepción imita esa casuística.*/
+            try {
+                /* Verifica si el contenido de 'showTextField' es un carácter válido, un número.
+                 *  En este caso solo se verifica el punto porque no hay más caracteres que no sean
+                 *  números en el teclado de la calculadora.
+                 *
+                 *  Si se introduce un carácter no permitido devolverá 'Introduce un número.' en color rojo
+                 *  en 'lastResultLabel', además pondrá 'showTextField' en blanco. */
+                if (!showTextField.getText().equals(".")) {
+                    number2 = Double.parseDouble(showTextField.getText());
+                    //Si se divide cualquier número entre 0 se devolverá 'Indivisible entre 0.' en rojo.
+                    if (number2 != 0) {
+                        //Trata 'NullPointerException' si se introduce un número y se da al botón igual seguidamente.
+                        try {
+                            operation();
+                        } catch (NullPointerException nullPointerException) {
+                            lastResultLabel.setText("Resultado: " + Double.parseDouble(showTextField.getText()));
+                            lastResultLabel.setForeground(Color.decode("#006400"));
+                        }
+                    } else {
+                        lastResultLabel.setText("Indivisible entre 0.");
+                        lastResultLabel.setForeground(Color.red);
+                    }
+                    /* Restablece la variable operación para que al pulsar
+                     * sobre el botón igual inmediatamente después de obtener el resultado
+                     * este no vuelva a sumarse, restarse, multiplicarse, etc., sobre sí
+                     * mismo.*/
+                    operation = null;
+                } else {
+                    lastResultLabel.setText("Introduce un número.");
+                    lastResultLabel.setForeground(Color.red);
+                    showTextField.setText("");
+                }
+            } catch (NumberFormatException numberFormatException) {
+                number2 = number1;
+                //Trata 'NullPointerException' al pulsar sobre '=' cuando no hay nada.
+                try {
+                    operation();
+                } catch (NullPointerException nullPointerException) {
+                    lastResultLabel.setText("Resultado : " + number1);
+                }
+                /* Restablece la variable operación para que al pulsar
+                 * sobre el botón igual inmediatamente después de obtener el resultado
+                 * este no vuelva a sumarse, restarse, multiplicarse, etc., sobre sí
+                 * mismo.*/
+                operation = null;
+                lastResultLabel.setText("Resultado: " + Double.parseDouble(String.valueOf(result)));
+                lastResultLabel.setForeground(Color.decode("#006400"));
             }
         });
 
@@ -316,19 +372,28 @@ public class Calculadora extends JFrame {
             case "x" -> result = number1 * number2;
             // División
             case "/" -> result = number1 / number2;
+            //Raíz Cuadrada
+            case "√" -> result = Math.sqrt(number1);
+            //Potencia
+            case "X^2" -> result = Math.pow(number1, 2);
             default -> result = 0;
         }
 
+        if (String.valueOf(result).equals("NaN")) {
+            lastResultLabel.setText("NaN");
+            lastResultLabel.setForeground(Color.red);
+            showTextField.setText("");
+        } else {
+            //Muestra 'result' en 'showTextField'.
+            showTextField.setText(String.valueOf(result));
+            number1 = result; // Actualiza 'number1' con el resultado actual
 
-        //Muestra 'result' en 'showTextField'.
-        showTextField.setText(String.valueOf(result));
-        number1 = result; // Actualiza 'number1' con el resultado actual
+            //Muestra 'result' en 'lastResultLabel'.
+            lastResultLabel.setText("Resultado: " + result);
 
-        //Muestra 'result' en 'lastResultLabel'.
-        lastResultLabel.setText("Resultado: " + result);
-
-        //Colorea 'lastResultLabel' en verde como muestra de operación válida.
-        lastResultLabel.setForeground(Color.decode("#006400"));
+            //Colorea 'lastResultLabel' en verde como muestra de operación válida.
+            lastResultLabel.setForeground(Color.decode("#006400"));
+        }
     }
 
     /**

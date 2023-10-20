@@ -1,3 +1,7 @@
 
-L
-java:S1068"/Remove this unused "bLayoutKeys" private field.(ŒÏ¦¹8Ø¥òó³1
+v
+java:S1192Î"SDefine a constant instead of duplicating this literal "Faltan operadores." 6 times.(ÏáïŠşÿÿÿÿ8şüøç´1
+u
+java:S3776Å"RRefactor this method to reduce its Cognitive Complexity from 40 to the 15 allowed.(àó³ëûÿÿÿÿ8™ıøç´1
+T
+java:S1068^"7Remove this unused "lastResultZeroLabel" private field.(É±¨‡8¢ıøç´1
